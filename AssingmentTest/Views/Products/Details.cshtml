@@ -1,0 +1,92 @@
+﻿@model AssingmentTest.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<h2>Details</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.category.CateName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.category.CateName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt>
+            @Html.DisplayName("Số Lượng Mua :")
+        </dt>
+
+        <dd>
+            <input type="text" name="quantity" id="ipQuantity" class="form-control" value="1" min="1">
+        </dd>
+        <dd>
+            <a   id="addToCart" class="btn  btn-primary">
+
+                <span class="text" h>Thêm vào giỏ hàng</span>
+            </a>
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+@section scripts{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        $(function () {
+            $("#addToCart").click(function () {
+                var model = {};
+                model.Id = @Model.ID;
+                model.quantity = $('#ipQuantity').val();
+                
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddToCart", "ShoppingCart")",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.code == 200) {
+
+                            alert("Thêm giỏ hàng thành công!")
+                        } else {
+                            alert("Số Lượng thêm vào vượt quá sản phẩm trong kho!")
+                        }
+                    },
+                    error: function (data) {
+                    }
+                })
+            })
+        })
+    </script>
+}
